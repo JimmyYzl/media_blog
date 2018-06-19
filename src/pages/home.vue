@@ -20,25 +20,48 @@
             <BlogList :key="item.id" :blogimage="item.image" :blogtitle="item.title" :blogdescription="item.description" :blogid="item.id" :blogdate="item.date" :blogtags="item.tags"></BlogList>
           </template>
 				</article>
-				<aside></aside>
+				<aside>
+          <blogAside></blogAside>
+        </aside>
 			</div>
 		</div>
 	</div>
 </template>
 
 <script>
-import BlogList from '../components/blogList'
+import BlogList from '../components/blogList';
+import blogAside from '../components/blogAside';
+import Api from '../api/index.js';
 export default {
   data() {
     return {
-      val: [
-        { "image": "http://pa919xbba.bkt.clouddn.com/5b2223c8c27f9c2c9a499e66.jpg", "title": "第一篇博客文章", "tags": ["学习"], "description": "看到别的大牛自己的博客一同有些羡慕，于是用了一周多时间完成了一个博客系统的构建。虽然简陋点，但是还能记录一些知识。方便复习与总结。", "date": "2018-06-14T08:39:09.514Z", "id": "5b222969c27f9c2c9a499e68" }
-        ]
+      val: [],
+      minheight: null
     }
   },
+
   components: {
-    BlogList: BlogList
-  }
+    BlogList: BlogList,
+    blogAside: blogAside
+  },
+
+  created () {
+		this.getBlogFn()
+	},
+	
+	methods: {
+		getBlogFn(page) {
+			var data = {};
+			if(page){
+				data.page = page;
+			}
+			Api.getlist(data, (data) => {
+				if(data.data.status == "ok") {
+					this.val = data.data.data;
+				}
+			})
+		}
+	}
 
 };
 
@@ -46,9 +69,15 @@ export default {
 
 <style lang="scss" scoped>
 	@media only screen and (max-width: 700px) {
+    .nav{
+      display: none !important;
+    }
 		.row {
 			width: 100%;
-		}
+    }
+    .main{
+      min-height: 1000px !important;
+    }
 		article {
 			width: 100%;
 		}
@@ -73,7 +102,7 @@ export default {
 		}
 	}
 
-	@media only screen and (max-width: 960px) and (min-width: 700px) {
+	@media only screen and (max-width: 1000px) and (min-width: 700px) {
 		.row {
 			width: 700px;
 			margin: 40px auto;
@@ -92,9 +121,9 @@ export default {
 		}
 	}
 
-	@media only screen and (min-width: 960px) {
+	@media only screen and (min-width: 1000px) {
 		.row {
-			width: 960px;
+			width: 1000px;
 			margin: 40px auto;
 			display: flex;
 			justify-content: space-around;
@@ -103,7 +132,7 @@ export default {
 			width: 700px;
 		}
 		aside {
-			width: 200px;
+			width: 240px;
 		}
 		header {
 			height: 420px;
@@ -119,7 +148,6 @@ export default {
 		background-size: cover;
 		background-position: center;
 		background-attachment: fixed;
-		height: 1090px;
 		header {
 			position: relative;
 			.nav {
@@ -176,13 +204,6 @@ export default {
 			background: #f7f8fa;
       width: 100%;
       overflow: hidden;
-		}
-		article {
-			height: 800px;
-		}
-		aside {
-			background: #aaa;
-			height: 800px;
 		}
 	}
 

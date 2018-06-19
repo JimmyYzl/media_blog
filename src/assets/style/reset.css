@@ -36,3 +36,7 @@ a {
 .clearfloat {
     zoom: 1
 }
+
+body{
+    background: #f7f8fa;
+}

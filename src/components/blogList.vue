@@ -85,6 +85,7 @@ export default {
   }
 }
 .blogList{
+  margin-top: 20px;
   padding: 30px 20px;
   background: #fff;
   .blogImg{
