@@ -17,11 +17,11 @@
 			<div class="row">
 				<article>
           <template v-for="item in val">
-            <BlogList :key="item.id" :blogimage="item.image" :blogtitle="item.title" :blogdescription="item.description" :blogid="item.id" :blogdate="item.date" :blogtags="item.tags"></BlogList>
+            <BlogList :key="item.id" :blogimage="item.image" :blogtitle="item.title" :blogdescription="item.description" :blogid="item.id" :blogdate="item.date" :blogtags="item.tags" @article="articleFn"></BlogList>
           </template>
 				</article>
 				<aside>
-          <blogAside></blogAside>
+          <blogAside @searchList="searchList" @tagFn="tagFn"></blogAside>
         </aside>
 			</div>
 		</div>
@@ -50,16 +50,36 @@ export default {
 	},
 	
 	methods: {
-		getBlogFn(page) {
+		getBlogFn(page, q, tag) {
 			var data = {};
 			if(page){
 				data.page = page;
 			}
+			if(q){
+				data.q = q;
+			}
+			if(tag){
+				data.tag = tag;
+			}
 			Api.getlist(data, (data) => {
 				if(data.data.status == "ok") {
 					this.val = data.data.data;
+				} else {
+					this.$message.error('数据请求失败');
 				}
 			})
+		},
+
+		searchList(q) {
+			this.getBlogFn(1, q);
+		},
+
+		tagFn(tag) {
+			this.getBlogFn(1, null, tag);
+		},
+
+		articleFn(id) {
+			this.$router.push({path: "/article", query: {id: id}});
 		}
 	}
 

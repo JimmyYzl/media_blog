@@ -8,23 +8,37 @@
     </div>
     <div class="line"></div>
     <ul class="tagslist">
-      <li v-for="item in tags" :key="item" class="tag">{{item}}</li>
+      <li class="tag" @click="$emit('tagFn', null)">全部</li>
+      <li v-for="item in tags" :key="item._id" class="tag" @click="$emit('tagFn',item.tag)">{{item.tag}}</li>
     </ul>
   </div>
   <div class="search">
     <el-input placeholder="搜索" v-model="searchVal">
-      <el-button slot="append" icon="el-icon-search"></el-button>
+      <el-button slot="append" icon="el-icon-search" @click="searchFn"></el-button>
     </el-input>
   </div>
 </div>
 </template>
 
 <script>
+import Api from '../api/index.js';
 export default {
   data () {
     return {
-      tags: ["学习", "生活", "互联网", "JavaScript"],
+      tags: null,
       searchVal: ''
+    }
+  },
+
+  created () {
+    Api.gettags({}, data => {
+      this.tags = data.data.data;
+    })
+  },
+
+  methods: {
+    searchFn() {
+      this.$emit('searchList', this.searchVal)
     }
   }
 }

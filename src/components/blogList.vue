@@ -1,5 +1,5 @@
 <template>
-  <div class="blogList">
+  <div class="blogList" @click="$emit('article', blogid)">
     <div class="blogImg" v-if="blogimage" :style="{backgroundImage: 'url('+blogimage+')', backgroundSize: 'cover'}"></div>
     <section>
       <h2>{{blogtitle}}</h2>
@@ -85,7 +85,7 @@ export default {
   }
 }
 .blogList{
-  margin-top: 20px;
+  margin-bottom: 20px;
   padding: 30px 20px;
   background: #fff;
   .blogImg{
@@ -116,12 +116,21 @@ export default {
       float: left;
       .tag{
         display: inline-block;
+        width: auto;
         height: 22px;
-        line-height: 22px;
         padding: 0 8px;
-        color: #a6abb2;
-        background: #fafafa;
         font-size: 14px;
+        color: #a6abb2;
+        line-height: 22px;
+        box-sizing: border-box;
+        box-shadow: 0 0 0.6px #d5dae1;
+        border-radius: 2px;
+        background-color: #fafafa;
+        margin-right: 7px;
+        transition: .2s;
+        &:hover{
+          color: #656565;
+        }
       }
     }
     time{
